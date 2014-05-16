@@ -1,4 +1,4 @@
 CellVi
 ======
 
-Open Pixel Control client based on Cellular Automata visualization s
+Open Pixel Control client based on Cellular Automata visualizations
