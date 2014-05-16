@@ -13,7 +13,7 @@ rules = []
 for x in reversed(ruleset):
     rules.append(x=="1")
 
-board = Board(size, color)
+board = Board(size, color, False)
 
 #for x in range(0,15):
 #    board.toggle(x*10)

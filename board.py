@@ -9,21 +9,15 @@ class Board:
             self.cells.append(Cell(self, pos, False))
 
     def get(self, pos):
-        if(wrap):
+        if(self.wrap):
             return self.cells[pos % self.length]
+        elif pos >= 0 and pos < len(self.cells):
+            return self.cells[pos]
         else:
-            try:
-                return self.cells[pos]
-            except IndexError:
-                return
+            return None
 
     def score(self, pos):
-        area = self.get(pos).neighbors()[::-1]
-        total = 0
-        for x in range(0, len(area)):
-            if(area[x].alive):
-                total += pow(2,x)
-        return total
+        return self.get(pos).score()
 
     def toggle(self, pos):
         self.get(pos).toggle()
@@ -54,4 +48,13 @@ class Cell:
         return self.board.get((self.pos - 1))
 
     def neighbors(self):
-        return [self.prev(), self, self.next()]
+        return [self.prev(), self, self.next()]  
+
+    def score(self):
+        area = self.neighbors()[::-1]
+        total = 0
+        for x in range(0, len(area)):
+            if(area[x] is not None and area[x].alive):
+                total += pow(2,x)
+        return total
+
