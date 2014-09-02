@@ -1,41 +1,56 @@
 class Board:
-    def __init__(self, length, color = (255,255,255), wrap = False):
+    def __init__(self, length, height, color = (255,255,255), wrap = False, totalistic = True):
         self.cells = []
         self.length = length
+        self.height = height
         self.color = color
         self.wrap = wrap
+        self.totalistic = totalistic
 
-        for pos in range(0,length):
-            self.cells.append(Cell(self, pos, False))
+        for x in range(0,length):
+            self.cells.append([])
+            for y in range(0, height):
+            	self.cells[x].append(Cell(self, x, y, False))
 
-    def get(self, pos):
+    def get(self, x, y):
         if(self.wrap):
-            return self.cells[pos % self.length]
-        elif pos >= 0 and pos < len(self.cells):
-            return self.cells[pos]
+            return self.cells[x % self.length][y % self.height]
+        elif x >= 0 and x < self.length and y >= 0 and y < self.height:
+            return self.cells[x][y]
         else:
             return None
 
-    def score(self, pos):
-        return self.get(pos).score()
+    def score(self, x, y):
+        return self.get(x, y).score()
 
-    def toggle(self, pos):
-        self.get(pos).toggle()
+    def toggle(self, x, y):
+        self.get(x, y).toggle()
 
     def output(self):
         output = []
-        for cell in self.cells:
-            if(cell.alive):
-                output.append(self.color)
-            else:
-                output.append((0,0,0))
+        for row in self.cells:
+            for cell in row:
+                if(cell.alive):
+                    output.append(self.color)
+                else:
+                    output.append((0,0,0))
 
         return output
 
+    def __str__(self):
+        output = ""
+        for x in range(self.length):
+            for y in range(self.height):
+                output = output + str(self.get(x, y))
+            output = output + "\n"
+        return output
+
+
 class Cell:
-    def __init__(self, board, pos, alive):
+    def __init__(self, board, x, y, alive):
         self.board = board
-        self.pos = pos
+        self.x = x
+        self.y = y
         self.alive = alive
 
     def toggle(self):
@@ -48,13 +63,26 @@ class Cell:
         return self.board.get((self.pos - 1))
 
     def neighbors(self):
-        return [self.prev(), self, self.next()]  
+        output = []
+        for x in range(-1,2):
+            for y in range(-1, 2):
+                if(x != 0 or y != 0):
+                    output.append(self.board.get(self.x + x, self.y + y))
+        return output
 
     def score(self):
         area = self.neighbors()[::-1]
         total = 0
         for x in range(0, len(area)):
             if(area[x] is not None and area[x].alive):
-                total += pow(2,x)
+                if(self.board.totalistic):
+                    total = total + 1
+                else:
+                    total += pow(2,x)
         return total
 
+    def __str__(self):
+        if self.alive:
+            return "*"
+        else:
+            return "."
