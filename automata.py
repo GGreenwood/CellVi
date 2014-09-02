@@ -18,9 +18,17 @@ delay = 1/2.0
 
 board = Board(length, height, color, wrap, totalistic)
 
-for x in range(0,500):
-    board.toggle(random.randint(0,30), random.randint(0,23))
-#board.toggle(2)
+#for x in range(0,500):
+    #board.toggle(random.randint(0,30), random.randint(0,23))
+
+board.toggle(2,0)
+board.toggle(2,1)
+board.toggle(2,2)
+board.toggle(1,2)
+board.toggle(0,1)
+#board.toggle(1,1)
+#board.toggle(1,2)
+#board.toggle(1,0)
 
 while True:
     print board
@@ -30,7 +38,7 @@ while True:
     new_board = Board(length, height, color, wrap, totalistic)
     for x in range(0, length):
         for y in range(0, height):
-            new_board.get(x, y).alive = ruleset[board.get(x,y).alive][board.score(x, y) - 1]
+            new_board.get(x, y).alive = ruleset[board.get(x,y).alive][board.score(x, y)]
 
     board = new_board
 
