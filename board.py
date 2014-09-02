@@ -10,7 +10,7 @@ class Board:
         for x in range(0,length):
             self.cells.append([])
             for y in range(0, height):
-            	self.cells[x].append(Cell(self, x, y, False))
+            	self.cells[x].append(Cell(self, x, y, 0))
 
     def get(self, x, y):
         if(self.wrap):
@@ -30,7 +30,7 @@ class Board:
         output = []
         for row in self.cells:
             for cell in row:
-                if(cell.alive):
+                if(cell.alive == 1):
                     output.append(self.color)
                 else:
                     output.append((0,0,0))
@@ -54,7 +54,10 @@ class Cell:
         self.alive = alive
 
     def toggle(self):
-        self.alive = not self.alive
+        if self.alive == 1:
+            self.alive = 0
+        else:
+            self.alive = 1
 
     def next(self):
         return self.board.get((self.pos + 1))
@@ -74,7 +77,7 @@ class Cell:
         area = self.neighbors()[::-1]
         total = 0
         for x in range(0, len(area)):
-            if(area[x] is not None and area[x].alive):
+            if(area[x] is not None and area[x].alive == 1):
                 if(self.board.totalistic):
                     total = total + 1
                 else:
@@ -82,7 +85,7 @@ class Cell:
         return total
 
     def __str__(self):
-        if self.alive:
+        if self.alive == 1:
             return "*"
         else:
             return "."
