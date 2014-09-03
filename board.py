@@ -28,7 +28,7 @@ class Board:
 
     def output(self):
         output = []
-        for row in self.cells:
+        for row in zip(*self.cells):
             for cell in row:
                 if(cell.alive == 1):
                     output.append(self.color)

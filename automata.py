@@ -7,31 +7,32 @@ client = opc.Client('beaglebone:7890')
 length = 30
 height = 23
 
-color = (128,0,128)
+color = (0,160,80)
 
-ruleset = [[0, 0, 0, 1, 0, 0, 0, 0], 
-           [0, 0, 1, 1, 0, 0, 0, 0]]
+ruleset = [[0, 0, 0, 1, 0, 0, 0, 0, 0], 
+           [0, 0, 1, 1, 0, 0, 0, 0, 0]]
 wrap = True
 totalistic = True
 
-delay = 1/2.0
+delay = 1/10.0
 
 board = Board(length, height, color, wrap, totalistic)
 
-#for x in range(0,500):
-    #board.toggle(random.randint(0,30), random.randint(0,23))
-
-board.toggle(2,0)
-board.toggle(2,1)
-board.toggle(2,2)
-board.toggle(1,2)
-board.toggle(0,1)
+if True:
+    for x in range(0,500):
+        board.toggle(random.randint(0,30), random.randint(0,23))
+else:
+    board.toggle(2,0)
+    board.toggle(2,1)
+    board.toggle(2,2)
+    board.toggle(1,2)
+    board.toggle(0,1)
 #board.toggle(1,1)
 #board.toggle(1,2)
 #board.toggle(1,0)
 
 while True:
-    print board
+    #print board
     client.put_pixels(board.output(), channel=0)
     time.sleep(delay)
 
