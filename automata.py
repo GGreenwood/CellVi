@@ -1,8 +1,9 @@
+#! /usr/bin/python
 from board import *
 import random
 import opc, time
 
-client = opc.Client('beaglebone:7890')
+client = opc.Client('localhost:7890')
 
 length = 30
 height = 23
@@ -10,7 +11,7 @@ height = 23
 #color = (0,80,140)
 #color = (102,20,153)
 color = (210,240,80)
-colors = ((255,0,0),(0,255,0))
+colors = ((255,10,10),(10,255,20))
 
 #ruleset = [[1, 1, 1, 1, 1, 1, 1, 1, 1], 
 #           [1, 1, 1, 1, 1, 1, 1, 1, 1]]
@@ -40,7 +41,6 @@ board = None
 #board.toggle(1,0)
 
 def reset():
-    iteration = 0
     board = Board(length, height, colors, wrap, totalistic)
     for x in range(0,500):
         board.toggle(random.randint(0,30), random.randint(0,23))
@@ -50,8 +50,9 @@ def reset():
 board = reset()
 
 while True:
-    if(iteration > 400):
-        reset()
+    if(iteration > 300):
+        board = reset()
+	iteration = 0
     else:
         iteration = iteration + 1
 
