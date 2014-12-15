@@ -1,16 +1,18 @@
+import random
+
 class Board:
-    def __init__(self, length, height, color = (255,255,255), wrap = False, totalistic = True):
+    def __init__(self, length, height, colors = (255,255,255), wrap = False, totalistic = True):
         self.cells = []
         self.length = length
         self.height = height
-        self.color = color
+        self.colors = colors
         self.wrap = wrap
         self.totalistic = totalistic
 
         for x in range(0,length):
             self.cells.append([])
             for y in range(0, height):
-            	self.cells[x].append(Cell(self, x, y, 0))
+            	self.cells[x].append(Cell(self, x, y, 0, self.colors[0]))
 
     def get(self, x, y):
         if(self.wrap):
@@ -25,13 +27,16 @@ class Board:
 
     def toggle(self, x, y):
         self.get(x, y).toggle()
+        if(self.get(x,y).alive):
+            self.get(x,y).colors = self.colors[random.randint(0,len(self.colors) - 1)]
 
     def output(self):
         output = []
         for row in zip(*self.cells):
             for cell in row:
                 if(cell.alive == 1):
-                    output.append(self.color)
+                    output.append(cell.color)
+                    #output.append((random.randint(0,255), random.randint(0,255), random.randint(0,255)));
                 else:
                     output.append((0,0,0))
 
@@ -47,11 +52,12 @@ class Board:
 
 
 class Cell:
-    def __init__(self, board, x, y, alive):
+    def __init__(self, board, x, y, alive, color):
         self.board = board
         self.x = x
         self.y = y
         self.alive = alive
+        self.color = color
 
     def toggle(self):
         if self.alive == 1:
